@@ -112,6 +112,10 @@ export interface GameState {
   // Economy
   goldBalance: number;
   p2pOffers: P2POffer[];
+  /** In-game $AZR tokens earned from quests/raids (NOT affected by listing payments) */
+  gameTokens: number;
+  /** Whether player paid the 0.5 GRAM listing qualification fee */
+  isQualifiedForAirdrop: boolean;
 
   // Character
   playerName: string;
@@ -199,6 +203,8 @@ export interface GameState {
   removeFriend: (id: string) => void;
   setPrivateChatTarget: (id: string | null) => void;
   setAlliance: (id: string | null) => void;
+  /** Pay 0.5 GRAM to qualify for $AZR airdrop listing (does NOT affect gameTokens) */
+  qualifyForAirdrop: () => void;
   startDuel: (opponentName: string) => void;
   duelAttack: () => void;
   endDuel: () => void;
@@ -265,6 +271,10 @@ export const useGameStore = create<GameState>()(
 
       goldBalance: 50,
       p2pOffers: [],
+      /** In-game $AZR tokens earned from quests/raids */
+      gameTokens: 0,
+      /** Whether player paid the 0.5 GRAM listing qualification fee */
+      isQualifiedForAirdrop: false,
 
       playerName: 'Путник',
       characterRace: 'human' as Race,
@@ -513,6 +523,9 @@ export const useGameStore = create<GameState>()(
         return { duel: { ...s.duel, opponentHp: newOppHp, playerHp: newPlayerHp, log: log2 } };
       }),
 
+      /** Pay 0.5 GRAM to qualify for $AZR airdrop listing (does NOT affect gameTokens) */
+      qualifyForAirdrop: () => set({ isQualifiedForAirdrop: true }),
+
       endDuel: () => set({ duel: { active: false, opponentName: '', playerHp: 100, opponentHp: 100, maxHp: 100, turn: 'player', log: [] } }),
     }),
     {
@@ -527,6 +540,8 @@ export const useGameStore = create<GameState>()(
         currentLocationId: s.currentLocationId, inventory: s.inventory, equipment: s.equipment,
         questProgress: s.questProgress, activeQuestId: s.activeQuestId,
         chatMessages: s.chatMessages, friends: s.friends, currentAllianceId: s.currentAllianceId,
+        gameTokens: s.gameTokens,
+        isQualifiedForAirdrop: s.isQualifiedForAirdrop,
         attributes: s.attributes,
       }),
     }
