@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  background: #0d0d1a;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+}
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+.font-title {
+  font-family: 'Cinzel', serif;
+}
+
+.font-fantasy {
+  font-family: 'Almendra', serif;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(251,191,36,0.4); }
+  50%       { box-shadow: 0 0 24px rgba(251,191,36,0.9); }
+}
+@keyframes portal-spin {
+  from { transform: rotateZ(0deg); }
+  to   { transform: rotateZ(360deg); }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25%     { transform: translateX(-6px); }
+  75%     { transform: translateX(6px); }
+}
+@keyframes xp-flash {
+  0%,100% { opacity:1; }
+  50%     { opacity:0.5; color:#fbbf24; }
+}
+@keyframes breathe {
+  0%, 100% { transform: scaleY(1) translateY(0); }
+  50%       { transform: scaleY(1.02) translateY(-0.02em); }
+}
+@keyframes rune-glow {
+  0%, 100% { text-shadow: 0 0 6px rgba(251,191,36,0.4); }
+  50%       { text-shadow: 0 0 18px rgba(251,191,36,0.8), 0 0 30px rgba(251,191,36,0.3); }
+}
+@keyframes pedestal-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.anim-fade-in   { animation: fadeIn 0.4s ease both; }
+.anim-slide-up  { animation: slide-up 0.35s ease both; }
+.anim-glow      { animation: glow-pulse 2s ease-in-out infinite; }
+.anim-shake     { animation: shake 0.35s ease; }
+.anim-xp        { animation: xp-flash 0.6s ease; }
+.anim-breathe   { animation: breathe 3s ease-in-out infinite; }
+.anim-rune      { animation: rune-glow 2.5s ease-in-out infinite; }

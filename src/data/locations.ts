@@ -1,0 +1,48 @@
+export interface LocationConfig {
+  id: string;
+  name: string;
+  nameEn: string;
+  description: string;
+  descriptionEn: string;
+  unlockLevel: number;
+  unlockQuestId: string | null;
+  groundColor: string;
+  skyColor: string;
+  fogColor: string;
+  fogNear: number;
+  fogFar: number;
+  nextLocationId: string | null;
+  resources: ResourceSpawn[];
+  difficultyCoeff: number;
+}
+
+export interface ResourceSpawn {
+  type: 'wood' | 'ore' | 'gold' | 'herb';
+  x: number;
+  z: number;
+  count: number;
+}
+
+export const LOCATIONS: LocationConfig[] = [
+  { id:'village',        name:'Деревня Начала',     nameEn:'Starting Village',   description:'Мирная деревня у подножия горы.',     descriptionEn:'Peaceful village at the mountain foot.',     unlockLevel:1,  unlockQuestId:null,        groundColor:'#4a7c59', skyColor:'#1a2f4a', fogColor:'#2d4a6a', fogNear:20, fogFar:60,  nextLocationId:'dark_forest',   difficultyCoeff:1,    resources:[{type:'wood',x:5,z:-8,count:5},{type:'wood',x:-6,z:-10,count:5},{type:'herb',x:2,z:9,count:4}] },
+  { id:'dark_forest',    name:'Тёмный Лес',         nameEn:'Dark Forest',        description:'Густой лес, полный опасностей.',      descriptionEn:'Dense forest full of dangers.',             unlockLevel:3,  unlockQuestId:'q_hub_1',   groundColor:'#2d4a2a', skyColor:'#0d1a0d', fogColor:'#1a2d1a', fogNear:12, fogFar:40,  nextLocationId:'caves',         difficultyCoeff:1.8,  resources:[{type:'wood',x:6,z:-7,count:8},{type:'ore',x:3,z:10,count:4},{type:'herb',x:9,z:2,count:5}] },
+  { id:'caves',          name:'Пещеры Эха',         nameEn:'Echo Caves',          description:'Пещеры, где отзывается каждый шаг.', descriptionEn:'Caves where every step echoes.',           unlockLevel:6,  unlockQuestId:'q_hub_2',   groundColor:'#3a3a4a', skyColor:'#0a0a15', fogColor:'#1a1a2a', fogNear:8,  fogFar:25,  nextLocationId:'swamp',         difficultyCoeff:2.5,  resources:[{type:'ore',x:4,z:-8,count:8},{type:'gold',x:-3,z:7,count:3},{type:'herb',x:8,z:8,count:3}] },
+  { id:'swamp',          name:'Болотные Топи',      nameEn:'Swamp Bogs',          description:'Ядовитые испарения и трясина.',      descriptionEn:'Poisonous vapors and quagmire.',            unlockLevel:9,  unlockQuestId:'q_hub_3',   groundColor:'#3a4a2a', skyColor:'#1a2a1a', fogColor:'#2a3a2a', fogNear:10, fogFar:30,  nextLocationId:'desert',        difficultyCoeff:3.2,  resources:[{type:'herb',x:5,z:-6,count:10},{type:'ore',x:-5,z:8,count:5},{type:'wood',x:7,z:4,count:4}] },
+  { id:'desert',         name:'Пустыня Забвения',   nameEn:'Oblivion Desert',     description:'Бескрайние дюны и миражи.',          descriptionEn:'Endless dunes and mirages.',                unlockLevel:12, unlockQuestId:'q_hub_4',   groundColor:'#c4a35a', skyColor:'#2a1a0a', fogColor:'#5a4a2a', fogNear:15, fogFar:45,  nextLocationId:'mountains',     difficultyCoeff:4,    resources:[{type:'gold',x:4,z:-8,count:6},{type:'ore',x:-6,z:5,count:7},{type:'herb',x:8,z:8,count:3}] },
+  { id:'mountains',      name:'Драконьи Горы',      nameEn:'Dragon Mountains',    description:'Вершины, где гнездятся драконы.',   descriptionEn:'Peaks where dragons nest.',                 unlockLevel:15, unlockQuestId:'q_hub_5',   groundColor:'#5a5a6a', skyColor:'#0d0d1a', fogColor:'#2a2a3a', fogNear:10, fogFar:35,  nextLocationId:'volcano',       difficultyCoeff:5,    resources:[{type:'ore',x:5,z:-10,count:10},{type:'gold',x:-4,z:7,count:5},{type:'herb',x:8,z:3,count:3}] },
+  { id:'volcano',        name:'Вулканические Пустоши',nameEn:'Volcanic Wastes',   description:'Раскалённая лава и пепел.',          descriptionEn:'Scorching lava and ash.',                   unlockLevel:18, unlockQuestId:'q_hub_6',   groundColor:'#4a2a1a', skyColor:'#1a0d0a', fogColor:'#3a1a0a', fogNear:8,  fogFar:25,  nextLocationId:'frozen_lake',   difficultyCoeff:6,    resources:[{type:'ore',x:3,z:-8,count:12},{type:'gold',x:-5,z:6,count:6},{type:'herb',x:7,z:9,count:2}] },
+  { id:'frozen_lake',    name:'Ледяное Озеро',      nameEn:'Frozen Lake',         description:'Вечная мерзлота и хрустальный лёд.', descriptionEn:'Eternal frost and crystal ice.',           unlockLevel:21, unlockQuestId:'q_hub_7',   groundColor:'#8aaac4', skyColor:'#0d1a2a', fogColor:'#4a6a8a', fogNear:12, fogFar:40,  nextLocationId:'ruins',         difficultyCoeff:7,    resources:[{type:'ore',x:6,z:-7,count:8},{type:'gold',x:-3,z:9,count:5},{type:'herb',x:5,z:5,count:4}] },
+  { id:'ruins',          name:'Руины Древних',      nameEn:'Ancient Ruins',       description:'Останки забытой цивилизации.',       descriptionEn:'Remains of a forgotten civilization.',    unlockLevel:24, unlockQuestId:'q_hub_8',   groundColor:'#5a4a5a', skyColor:'#1a0d1a', fogColor:'#3a2a3a', fogNear:10, fogFar:35,  nextLocationId:'necropolis',    difficultyCoeff:8,    resources:[{type:'gold',x:4,z:-9,count:8},{type:'ore',x:-5,z:7,count:6},{type:'herb',x:8,z:4,count:3}] },
+  { id:'necropolis',     name:'Некрополь',          nameEn:'Necropolis',          description:'Город мёртвых, полный нежити.',     descriptionEn:'City of the dead, full of undead.',         unlockLevel:27, unlockQuestId:'q_hub_9',   groundColor:'#2a2a3a', skyColor:'#050510', fogColor:'#1a1a2a', fogNear:6,  fogFar:20,  nextLocationId:'shadow_realm',  difficultyCoeff:9.5,  resources:[{type:'gold',x:5,z:-8,count:10},{type:'herb',x:-4,z:6,count:6},{type:'ore',x:7,z:5,count:5}] },
+  { id:'shadow_realm',   name:'Царство Теней',      nameEn:'Shadow Realm',        description:'Между жизнью и смертью.',           descriptionEn:'Between life and death.',                  unlockLevel:30, unlockQuestId:'q_hub_10',  groundColor:'#1a1a2a', skyColor:'#030308', fogColor:'#0d0d1a', fogNear:5,  fogFar:18,  nextLocationId:'crystal_caves', difficultyCoeff:11,   resources:[{type:'gold',x:3,z:-7,count:12},{type:'ore',x:-5,z:8,count:8},{type:'herb',x:6,z:4,count:4}] },
+  { id:'crystal_caves',  name:'Кристальные Пещеры', nameEn:'Crystal Caves',       description:'Сияющие кристаллы под землёй.',     descriptionEn:'Glowing crystals underground.',            unlockLevel:33, unlockQuestId:'q_hub_11',  groundColor:'#3a4a6a', skyColor:'#0a0d1a', fogColor:'#2a3a5a', fogNear:8,  fogFar:28,  nextLocationId:'sky_islands',    difficultyCoeff:12.5, resources:[{type:'gold',x:4,z:-8,count:10},{type:'ore',x:-6,z:6,count:10},{type:'herb',x:7,z:7,count:3}] },
+  { id:'sky_islands',    name:'Небесные Острова',   nameEn:'Sky Islands',         description:'Парящие острова над облаками.',     descriptionEn:'Floating islands above the clouds.',       unlockLevel:36, unlockQuestId:'q_hub_12',  groundColor:'#6a8aaa', skyColor:'#1a3a6a', fogColor:'#4a6a8a', fogNear:15, fogFar:50,  nextLocationId:'abyss',          difficultyCoeff:14,   resources:[{type:'gold',x:5,z:-6,count:14},{type:'ore',x:-4,z:8,count:8},{type:'herb',x:6,z:5,count:4}] },
+  { id:'abyss',          name:'Бездна',             nameEn:'The Abyss',           description:'Глубины, откуда нет возврата.',     descriptionEn:'Depths from which there is no return.',     unlockLevel:39, unlockQuestId:'q_hub_13',  groundColor:'#0d0d1a', skyColor:'#020208', fogColor:'#0d0d15', fogNear:4,  fogFar:15,  nextLocationId:'demon_realm',    difficultyCoeff:16,   resources:[{type:'gold',x:3,z:-8,count:15},{type:'ore',x:-5,z:7,count:10},{type:'herb',x:7,z:4,count:3}] },
+  { id:'demon_realm',    name:'Демоническое Измерение',nameEn:'Demon Realm',     description:'Адское пламя и демоны.',             descriptionEn:'Hellish flames and demons.',               unlockLevel:42, unlockQuestId:'q_hub_14',  groundColor:'#3a1a0a', skyColor:'#1a0505', fogColor:'#2a0d0d', fogNear:6,  fogFar:22,  nextLocationId:'celestial_peak',difficultyCoeff:18,  resources:[{type:'gold',x:4,z:-7,count:18},{type:'ore',x:-6,z:6,count:12},{type:'herb',x:8,z:5,count:2}] },
+  { id:'celestial_peak', name:'Небесный Пик',       nameEn:'Celestial Peak',      description:'Вершина мира, где живут боги.',     descriptionEn:'Peak of the world where gods dwell.',      unlockLevel:45, unlockQuestId:'q_hub_15',  groundColor:'#e0e8f0', skyColor:'#1a2a4a', fogColor:'#a0b0d0', fogNear:18, fogFar:60,  nextLocationId:'void',          difficultyCoeff:20,   resources:[{type:'gold',x:5,z:-8,count:20},{type:'ore',x:-5,z:8,count:14},{type:'herb',x:7,z:6,count:5}] },
+  { id:'void',           name:'Пустота',            nameEn:'The Void',            description:'За пределами реальности.',           descriptionEn:'Beyond reality itself.',                   unlockLevel:48, unlockQuestId:'q_hub_16',  groundColor:'#0a0a0a', skyColor:'#030303', fogColor:'#0a0a0a', fogNear:3,  fogFar:12,  nextLocationId:'throne_of_azeria',difficultyCoeff:22, resources:[{type:'gold',x:3,z:-7,count:25},{type:'ore',x:-6,z:7,count:15},{type:'herb',x:8,z:5,count:3}] },
+  { id:'throne_of_azeria',name:'Трон Азерии',       nameEn:'Throne of Azeria',    description:'Финальная битва за судьбу мира.',   descriptionEn:'Final battle for the fate of the world.',  unlockLevel:50, unlockQuestId:'q_hub_17',  groundColor:'#1a0a2a', skyColor:'#0a0515', fogColor:'#2a1a4a', fogNear:10, fogFar:35,  nextLocationId:null,            difficultyCoeff:25,   resources:[{type:'gold',x:4,z:-8,count:30},{type:'ore',x:-5,z:7,count:18},{type:'herb',x:7,z:6,count:5}] },
+  { id:'hub',            name:'Цитадель Азерии',    nameEn:'Citadel of Azeria',   description:'Центральный хаб мира.',             descriptionEn:'Central hub of the world.',                unlockLevel:1,  unlockQuestId:null,        groundColor:'#2a2a3e', skyColor:'#0d1a2e', fogColor:'#0d1a2e', fogNear:20, fogFar:60,  nextLocationId:null,            difficultyCoeff:1,    resources:[] },
+];
+
+export const getLocation = (id: string) => LOCATIONS.find(l => l.id === id) ?? LOCATIONS[0];
