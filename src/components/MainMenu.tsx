@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MenuScene } from '../game/MenuScene';
 import { useGameStore } from '../store/gameStore';
 import { WalletButton } from './WalletButton';
 import { P2PMarket } from './P2PMarket';
 import { IconPlay, IconHub, IconBackpack, IconProfile, IconStats, IconSettings, IconMarket, IconFriends, IconAlliance, IconAirdrop, IconGold, IconCrown } from './GameIcons';
+import { playSfx } from '../audio/sfx';
 
 const T = {
   ru: { play:'ИГРАТЬ', hub:'Цитадель', inventory:'Инвентарь', profile:'Профиль', stats:'Статистика',
@@ -278,7 +279,7 @@ export const MainMenu: React.FC = () => {
             </span>
           </div>
           {attributes.unspent > 0 && (
-            <button onClick={() => setScreen('attributes')}
+            <button onClick={() => { playSfx('coin'); setScreen('attributes'); }}
               className="relative bg-gradient-to-r from-primary-500 to-primary-400 text-dark-800 text-[10px] font-bold px-2.5 py-1 font-cinzel animate-pulse rounded">
               <span className="absolute -top-1 -right-1 w-2 h-2 bg-accent-400 rounded-full"/>
               +{attributes.unspent}
@@ -295,7 +296,7 @@ export const MainMenu: React.FC = () => {
             </svg>
           </div>
 
-          <button onClick={() => setScreen('game')} className="relative w-full group">
+          <button onClick={() => { playSfx('magic_cast'); setScreen('game'); }} className="relative w-full group">
             <svg className="absolute inset-0 w-full h-full text-primary-400" viewBox="0 0 280 48" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="playBtnGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -330,7 +331,7 @@ export const MainMenu: React.FC = () => {
           <div className="relative px-4 pt-4 pb-6">
             <div className="grid grid-cols-4 gap-2">
               {menuButtons.map(item => (
-                <button key={item.key} onClick={() => setScreen(item.screen)}
+                <button key={item.key} onClick={() => { playSfx('coin'); setScreen(item.screen); }}
                   className={`relative group flex flex-col items-center gap-1.5 py-2.5 transition-all duration-300 active:scale-95 ${
                     item.accent ? 'text-primary-400' : 'text-white/70'
                   }`}>
@@ -349,7 +350,7 @@ export const MainMenu: React.FC = () => {
             </div>
 
             <div className="flex gap-2 mt-3">
-              <button onClick={() => setShowMarket(true)}
+              <button onClick={() => { playSfx('coin'); setShowMarket(true); }}
                 className="relative flex-1 group flex items-center justify-center gap-2 py-2.5 active:scale-95 transition-transform text-accent-400">
                 <svg className="absolute inset-0 w-full h-full text-accent-400/20" viewBox="0 0 120 44" preserveAspectRatio="none">
                   <path d="M4 0 L116 0 Q120 0 120 4 L120 40 Q120 44 116 44 L4 44 Q0 44 0 40 L0 4 Q0 0 4 0 Z"
@@ -358,7 +359,7 @@ export const MainMenu: React.FC = () => {
                 <IconMarket size={14} glow />
                 <span className="text-[10px] font-cinzel font-semibold tracking-wider relative z-10">{t.market}</span>
               </button>
-              <button onClick={() => setScreen('charcreate')}
+              <button onClick={() => { playSfx('magic_cast'); setScreen('charcreate'); }}
                 className="relative flex-1 group flex items-center justify-center gap-2 py-2.5 active:scale-95 transition-transform text-secondary-400">
                 <svg className="absolute inset-0 w-full h-full text-secondary-400/20" viewBox="0 0 120 44" preserveAspectRatio="none">
                   <path d="M4 0 L116 0 Q120 0 120 4 L120 40 Q120 44 116 44 L4 44 Q0 44 0 40 L0 4 Q0 0 4 0 Z"

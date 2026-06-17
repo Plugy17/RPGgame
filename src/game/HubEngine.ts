@@ -393,39 +393,156 @@ export class HubEngine {
     this.scene.add(light);
   }
 
+  private createGlowMaterial(color: number, emissiveColor: number): THREE.MeshStandardMaterial {
+    const mat = new THREE.MeshStandardMaterial({
+      color,
+      emissive: emissiveColor,
+      emissiveIntensity: 0.8,
+      metalness: 0.7,
+      roughness: 0.3,
+    });
+    this.glowMaterials.push(mat);
+    return mat;
+  }
+
   private buildCharacter(color: number): THREE.Group {
     const g = new THREE.Group();
 
-    // Body with better materials
-    const bodyGeo = new THREE.CylinderGeometry(0.24, 0.2, 0.8, 8);
-    const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.2 });
-    body.position.y = 0.8;
-    g.add(body);
+    // Torso with segmented armor
+    const torsoMat = new THREE.MeshStandardMaterial({
+      color,
+      metalness: 0.4,
+      roughness: 0.6,
+    });
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.2, 0.8, 8), torsoMat);
+    torso.position.y = 0.8;
+    torso.castShadow = true;
+    g.add(torso);
 
-    // Pauldrons
+    // Chest plate with magical glow
+    const chestMat = this.createGlowMaterial(0x2a4a7a, 0x4a9eff);
+    const chest = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.3, 0.28), chestMat);
+    chest.position.set(0, 0.88, 0.06);
+    g.add(chest);
+
+    // Glowing rune on chest
+    const runeMat = new THREE.MeshBasicMaterial({
+      color: 0x4a9eff,
+      transparent: true,
+      opacity: 0.9,
+      side: THREE.DoubleSide,
+    });
+    const rune = new THREE.Mesh(new THREE.RingGeometry(0.04, 0.08, 6), runeMat);
+    rune.position.set(0, 0.9, 0.2);
+    rune.userData.isGlow = true;
+    g.add(rune);
+
+    // Belt with magical buckle
+    const beltMat = this.createGlowMaterial(0x8a6a2a, 0xfbbf24);
+    const belt = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.03, 6, 16), beltMat);
+    belt.rotation.x = Math.PI / 2;
+    belt.position.y = 0.5;
+    g.add(belt);
+
+    // Pauldrons with glow
     for (const sx of [-0.32, 0.32]) {
-      const pGeo = new THREE.SphereGeometry(0.12, 6, 6);
-      const pMat = new THREE.MeshStandardMaterial({ color: 0xfbbf24, roughness: 0.3, metalness: 0.5 });
-      const p = new THREE.Mesh(pGeo, pMat);
+      const pauldronMat = this.createGlowMaterial(0xfbbf24, 0xfbbf24);
+      const p = new THREE.Mesh(new THREE.SphereGeometry(0.12, 6, 6), pauldronMat);
       p.position.set(sx, 1.08, 0);
       g.add(p);
+
+      // Spikes on pauldrons
+      for (let i = 0; i < 3; i++) {
+        const spikeMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.8 });
+        const spike = new THREE.Mesh(new THREE.ConeGeometry(0.015, 0.08, 4), spikeMat);
+        spike.position.set(sx, 1.15 + i * 0.02, 0.06 + i * 0.03);
+        spike.rotation.x = -0.3;
+        spike.userData.isGlow = true;
+        g.add(spike);
+      }
     }
 
-    // Head
-    const headGeo = new THREE.SphereGeometry(0.22, 10, 10);
-    const headMat = new THREE.MeshStandardMaterial({ color: 0xf0c8a0, roughness: 0.8 });
-    const head = new THREE.Mesh(headGeo, headMat);
+    // Head with detail
+    const headMat = new THREE.MeshStandardMaterial({ color: 0xf0c8a0, roughness: 0.7 });
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.22, 10, 10), headMat);
     head.position.y = 1.35;
+    head.castShadow = true;
     g.add(head);
 
-    // Legs
-    for (const lx of [-0.12, 0.12]) {
-      const legGeo = new THREE.CylinderGeometry(0.09, 0.07, 0.55, 6);
-      const legMat = new THREE.MeshStandardMaterial({ color: 0x1e3a5f, roughness: 0.6 });
-      const leg = new THREE.Mesh(legGeo, legMat);
-      leg.position.set(lx, 0.28, 0);
-      g.add(leg);
+    // Eyes with magical glow
+    for (const side of [-1, 1]) {
+      const eyeMat = this.createGlowMaterial(0x4a9eff, 0x4a9eff);
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.02, 6, 6), eyeMat);
+      eye.position.set(side * 0.08, 1.37, 0.18);
+      g.add(eye);
     }
+
+    // Helmet with glow
+    const helmMat = this.createGlowMaterial(0x8a6a2a, 0xfbbf24);
+    const helm = new THREE.Mesh(
+      new THREE.SphereGeometry(0.26, 10, 10, 0, Math.PI * 2, 0, Math.PI / 2),
+      helmMat
+    );
+    helm.position.y = 1.43;
+    g.add(helm);
+
+    // Helmet crest glow
+    const crestMat = new THREE.MeshBasicMaterial({ color: 0x4a9eff, transparent: true, opacity: 0.8 });
+    const crest = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.12, 0.2), crestMat);
+    crest.position.set(0, 1.58, 0);
+    crest.userData.isGlow = true;
+    g.add(crest);
+
+    // Arms with bracers
+    for (const ax of [-0.32, 0.32]) {
+      const armMat = new THREE.MeshStandardMaterial({ color, metalness: 0.3, roughness: 0.6 });
+      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.3, 5), armMat);
+      arm.position.set(ax, 0.7, 0);
+      g.add(arm);
+
+      // Bracer with glow
+      const bracerMat = this.createGlowMaterial(0x6a5a3a, 0xfbbf24);
+      const bracer = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.075, 0.1, 5), bracerMat);
+      bracer.position.set(ax, 0.52, 0);
+      g.add(bracer);
+    }
+
+    // Legs with greaves
+    for (const lx of [-0.12, 0.12]) {
+      const thighMat = new THREE.MeshStandardMaterial({ color: 0x1e3a5f, metalness: 0.3, roughness: 0.6 });
+      const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.07, 0.3, 5), thighMat);
+      thigh.position.set(lx, 0.28, 0);
+      g.add(thigh);
+
+      // Knee with glow
+      const kneeMat = this.createGlowMaterial(0x6a5a3a, 0xfbbf24);
+      const knee = new THREE.Mesh(new THREE.SphereGeometry(0.06, 5, 5), kneeMat);
+      knee.position.set(lx, 0.12, 0.02);
+      g.add(knee);
+
+      // Shin
+      const shinMat = new THREE.MeshStandardMaterial({ color: 0x1e3a5f, metalness: 0.3, roughness: 0.6 });
+      const shin = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.06, 0.25, 5), shinMat);
+      shin.position.set(lx, -0.02, 0);
+      g.add(shin);
+
+      // Boots with glow
+      const bootMat = this.createGlowMaterial(0x4a3a2a, 0xfbbf24);
+      const boot = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.12, 0.18), bootMat);
+      boot.position.set(lx, -0.18, 0.02);
+      g.add(boot);
+    }
+
+    // Cape
+    const capeMat = new THREE.MeshStandardMaterial({
+      color: 0xcc2233,
+      side: THREE.DoubleSide,
+      roughness: 0.8,
+    });
+    const cape = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.7, 6, 6), capeMat);
+    cape.position.set(0, 0.55, -0.18);
+    cape.rotation.x = 0.1;
+    g.add(cape);
 
     return g;
   }
@@ -596,6 +713,7 @@ export class HubEngine {
     this.updatePlayer(dt);
     this.updateBots(dt, t);
     this.animateTorches(t);
+    this.animateGlow(t);
 
     if (now - this.lastStreamUpdate > 150) {
       this.lastStreamUpdate = now;
@@ -642,6 +760,12 @@ export class HubEngine {
       bot.mesh.rotation.y = Math.atan2(dir.x, dir.z);
       for (let i = 4; i < 6; i++) { const c = bot.mesh.children[i]; if (c) c.rotation.x = Math.sin(t * 4 * bot.speed + (i % 2) * Math.PI) * 0.35; }
     }
+  }
+
+  private animateGlow(t: number) {
+    this.glowMaterials.forEach(mat => {
+      mat.emissiveIntensity = 0.6 + Math.sin(t * 2) * 0.2;
+    });
   }
 
   private animateTorches(t: number) {

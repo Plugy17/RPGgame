@@ -89,7 +89,7 @@ export const HubScreen: React.FC = () => {
         </span>
       </div>
 
-      <button onClick={() => store.setScreen('menu')}
+      <button onClick={() => { playSfx('coin'); store.setScreen('menu'); }}
         className="absolute top-3 left-3 z-20 bg-dark-800/80 border border-white/15 rounded-full px-3 py-1.5 text-white/70 text-xs hover:text-white active:scale-95 font-cinzel">
         ← {language === 'ru' ? 'Меню' : 'Menu'}
       </button>
@@ -111,23 +111,48 @@ export const HubScreen: React.FC = () => {
         onPointerDown={onJoyStart} onPointerMove={onJoyMove} onPointerUp={onJoyEnd} onPointerLeave={onJoyEnd}
         style={{ touchAction: 'none' }}>
         {joystick.active ? (
-          <div className="absolute pointer-events-none" style={{ left: joystick.baseX - JOYSTICK_RADIUS, top: joystick.baseY - JOYSTICK_RADIUS - (window.innerHeight - (canvasRef.current?.offsetHeight ?? window.innerHeight)) }}>
-            <div className="absolute rounded-full bg-white/10 border-2 border-white/30" style={{ width: JOYSTICK_RADIUS * 2, height: JOYSTICK_RADIUS * 2 }} />
-            <div className="absolute rounded-full bg-white/50 border-2 border-white/80" style={{ width: 40, height: 40, left: JOYSTICK_RADIUS - 20 + joystick.knobX, top: JOYSTICK_RADIUS - 20 + joystick.knobY }} />
+          <div className="absolute pointer-events-none"
+            style={{ left: joystick.baseX - JOYSTICK_RADIUS, top: joystick.baseY - JOYSTICK_RADIUS - (window.innerHeight - (canvasRef.current?.offsetHeight ?? window.innerHeight)), transform: 'none' }}>
+            <div className="relative" style={{ width: JOYSTICK_RADIUS * 2, height: JOYSTICK_RADIUS * 2 }}>
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 110 110" fill="none">
+                <circle cx="55" cy="55" r="54" stroke="rgba(251,191,36,0.4)" strokeWidth="1.5" fill="rgba(13,13,26,0.6)"/>
+                <circle cx="55" cy="55" r="48" stroke="rgba(251,191,36,0.2)" strokeWidth="0.5"/>
+              </svg>
+              <div
+                className="absolute rounded-full bg-gradient-to-br from-primary-400 to-primary-600 border-2 border-primary-300"
+                style={{
+                  width: 44, height: 44,
+                  left: JOYSTICK_RADIUS - 22 + joystick.knobX,
+                  top: JOYSTICK_RADIUS - 22 + joystick.knobY,
+                  boxShadow: '0 0 15px rgba(251,191,36,0.5)'
+                }}
+              />
+            </div>
           </div>
         ) : (
-          <div className="absolute bottom-8 left-8 w-24 h-24 rounded-full border border-white/10 bg-white/5 flex items-center justify-center pointer-events-none">
-            <span className="text-white/20 text-3xl">+</span>
+          <div className="absolute bottom-8 left-8 w-28 h-28 pointer-events-none">
+            <div className="relative w-full h-full">
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 112 112" fill="none">
+                <circle cx="56" cy="56" r="55" stroke="rgba(251,191,36,0.15)" strokeWidth="1" fill="rgba(13,13,26,0.3)"/>
+                <circle cx="56" cy="56" r="48" stroke="rgba(251,191,36,0.1)" strokeWidth="0.5"/>
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <svg className="w-10 h-10 text-primary-400/30" viewBox="0 0 40 40" fill="none">
+                  <circle cx="20" cy="20" r="8" stroke="currentColor" strokeWidth="1"/>
+                  <path d="M20 4 L20 12 M20 28 L20 36 M4 20 L12 20 M28 20 L36 20" stroke="currentColor" strokeWidth="1"/>
+                </svg>
+              </div>
+            </div>
           </div>
         )}
       </div>
 
       <div className="absolute bottom-6 right-4 z-20 flex flex-col gap-3 items-end">
-        <button onClick={() => setShowP2P(true)}
+        <button onClick={() => { playSfx('coin'); setShowP2P(true); }}
           className="flex items-center gap-1.5 bg-dark-800/80 border border-white/20 rounded-full px-3 py-2 text-sm font-semibold text-white/80 active:scale-90 transition-transform hover:border-primary-400/50 font-cinzel">
           <IconMarket size={14} glow /> {language === 'ru' ? 'Рынок' : 'Market'}
         </button>
-        <button onClick={() => setInventoryOpen(true)}
+        <button onClick={() => { playSfx('coin'); setInventoryOpen(true); }}
           className="w-12 h-12 rounded-full bg-dark-800/80 border border-white/20 flex items-center justify-center active:scale-90 transition-transform">
           <IconBackpack size={20} glow />
         </button>
