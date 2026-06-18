@@ -205,3 +205,6 @@ export const GRAM_SHOP_ITEMS: GramShopItem[] = [
     rarity: 'rare',
   },
 ];
+
+/** Alias for backward compatibility with WalletButton — references GRAM prices */
+export const TON_SHOP_ITEMS: GramShopItem[] = GRAM_SHOP_ITEMS;

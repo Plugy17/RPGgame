@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Wallet, Loader } from 'lucide-react';
-import { tonConnect, shortAddress, TON_SHOP_ITEMS } from '../web3/tonConnect';
+import { tonConnect, shortAddress, GRAM_SHOP_ITEMS, type GramShopItem } from '../web3/tonConnect';
 import { useGameStore } from '../store/gameStore';
+import { playSfx } from '../audio/sfx';
 
 const T = {
   ru: { connect: 'Подключить кошелёк', connecting: 'Подключение...', disconnect: 'Отключить',
-        buy: 'Купить за TON', success: 'Куплено!', error: 'Ошибка', notEnough: 'Мало TON',
-        shop: 'TON Магазин', close: 'Закрыть', balance: 'Баланс', selectWallet: 'Выберите кошелёк' },
+        buy: 'Купить за GRAM', success: 'Куплено!', error: 'Ошибка', notEnough: 'Мало GRAM',
+        shop: 'GRAM Магазин', close: 'Закрыть', balance: 'Баланс GRAM', selectWallet: 'Выберите кошелёк' },
   en: { connect: 'Connect Wallet', connecting: 'Connecting...', disconnect: 'Disconnect',
-        buy: 'Buy for TON', success: 'Purchased!', error: 'Error', notEnough: 'Not enough TON',
-        shop: 'TON Shop', close: 'Close', balance: 'Balance', selectWallet: 'Select wallet' },
+        buy: 'Buy for GRAM', success: 'Purchased!', error: 'Error', notEnough: 'Not enough GRAM',
+        shop: 'GRAM Shop', close: 'Close', balance: 'GRAM Balance', selectWallet: 'Select wallet' },
 };
 
 export const WalletButton: React.FC = () => {
-  const { walletAddress, tonBalance, setWallet, language, addInventoryItem, addGold } = useGameStore();
+  const { walletAddress, tonBalance, setWallet, language, addInventoryItem, addGold, qualifyForAirdrop } = useGameStore();
   const [loading, setLoading] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showShop, setShowShop] = useState(false);
@@ -32,6 +33,7 @@ export const WalletButton: React.FC = () => {
     setLoading(true);
     setShowMenu(false);
     try {
+      playSfx('coin');
       await tonConnect.connect(walletName);
     } finally {
       setLoading(false);
@@ -43,19 +45,30 @@ export const WalletButton: React.FC = () => {
     setShowMenu(false);
   };
 
-  const handleBuy = async (item: typeof TON_SHOP_ITEMS[0]) => {
+  const handleBuy = async (item: GramShopItem) => {
+    playSfx('coin');
     setBuyingId(item.id);
-    const result = await tonConnect.sendTransaction({ tonAmount: item.price, itemId: item.itemId });
+    const result = await tonConnect.sendTransaction({
+      gramAmount: item.priceGram,
+      itemId: item.itemId,
+      to: 'EQD...developerWallet',
+    });
     setBuyingId(null);
     if (result.ok) {
       if (item.itemId === 'gold') {
-        addGold(100);
+        addGold(200);
+      } else if (item.itemId === 'listing_qualification') {
+        qualifyForAirdrop();
+      } else if (item.skinId) {
+        useGameStore.getState().setActiveSkin(item.skinId);
+        addInventoryItem(item.itemId, 1);
       } else {
         addInventoryItem(item.itemId, 1);
       }
       showToast(`✅ ${t.success}`);
+      playSfx('magic_cast');
     } else {
-      showToast(`❌ ${tonBalance !== null && tonBalance < item.price ? t.notEnough : t.error}`);
+      showToast(`❌ ${tonBalance !== null && tonBalance < item.priceGram ? t.notEnough : t.error}`);
     }
   };
 
@@ -111,7 +124,7 @@ export const WalletButton: React.FC = () => {
         >
           <span className="text-[10px] text-accent-300 font-mono">{shortAddress(walletAddress)}</span>
           {tonBalance !== null && (
-            <span className="text-accent-400 text-xs font-bold ml-1">💎 {tonBalance}</span>
+            <span className="text-accent-400 text-xs font-bold ml-1">💎 {tonBalance.toFixed(2)}</span>
           )}
         </button>
         <button
@@ -130,35 +143,35 @@ export const WalletButton: React.FC = () => {
         )}
       </div>
 
-      {/* TON Shop Modal */}
+      {/* GRAM Shop Modal */}
       {showShop && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-dark-800/90 backdrop-blur anim-fade-in"
           onClick={() => setShowShop(false)}>
           <div className="bg-dark-700 border border-white/10 rounded-2xl p-5 w-80 mx-3 anim-slide-up"
             onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-bold">💎 {t.shop}</h3>
+              <h3 className="text-white font-bold font-cinzel">💎 {t.shop}</h3>
               <div className="flex items-center gap-1.5">
-                <span className="text-accent-400 text-sm font-bold">{tonBalance} TON</span>
+                <span className="text-accent-400 text-sm font-bold">{tonBalance?.toFixed(2)} GRAM</span>
                 <button onClick={() => setShowShop(false)} className="text-white/40 hover:text-white text-lg ml-2">×</button>
               </div>
             </div>
             <div className="space-y-2">
-              {TON_SHOP_ITEMS.map(item => (
-                <div key={item.id} className="flex items-center gap-3 bg-dark-800 rounded-xl p-3 border border-white/5">
-                  <span className="text-3xl">{item.icon}</span>
+              {GRAM_SHOP_ITEMS.map(item => (
+                <div key={item.id} className="flex items-center gap-3 bg-dark-800 rounded-xl p-3 border border-white/5 hover:border-primary-400/30 transition-all">
+                  <span className="text-3xl w-10 h-10 flex items-center justify-center">{item.icon}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium text-sm">{language === 'ru' ? item.name : item.nameEn}</p>
-                    <p className="text-white/40 text-xs truncate">{language === 'ru' ? item.description : item.descriptionEn}</p>
+                    <p className="text-white font-medium text-xs font-cinzel">{language === 'ru' ? item.name : item.nameEn}</p>
+                    <p className="text-white/40 text-[10px] truncate font-almendra">{language === 'ru' ? item.description : item.descriptionEn}</p>
                   </div>
                   <button
                     disabled={buyingId === item.id}
                     onClick={() => handleBuy(item)}
-                    className="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs active:scale-95 disabled:opacity-50"
+                    className="relative flex items-center gap-1 bg-gradient-to-r from-primary-600 to-primary-500 text-dark-800 font-bold px-3 py-1.5 rounded-lg text-xs active:scale-95 disabled:opacity-50 font-cinzel"
                   >
                     {buyingId === item.id
                       ? <Loader size={12} className="animate-spin" />
-                      : <span>💎 {item.price}</span>
+                      : <span>💎 {item.priceGram} GRAM</span>
                     }
                   </button>
                 </div>
@@ -169,7 +182,7 @@ export const WalletButton: React.FC = () => {
       )}
 
       {toast && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-dark-700 border border-white/20 text-white text-sm font-semibold px-5 py-2.5 rounded-xl anim-slide-up z-[100]">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-dark-700 border border-primary-400/30 text-primary-200 text-sm font-semibold px-5 py-2.5 rounded-xl anim-slide-up z-[100] font-cinzel">
           {toast}
         </div>
       )}
