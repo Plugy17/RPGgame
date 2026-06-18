@@ -6,6 +6,7 @@ import { QUESTS } from '../data/quests';
 import { TelegramSDK } from '../telegram/sdk';
 import type { Race, CharClass, AttributePoints } from '../data/classes';
 import { computeStatsFromAttributes, canEquipWeapon, WEAPON_TAGS } from '../data/classes';
+import { savePlayerData, loadPlayerData } from '../firebase/config';
 
 export type Screen = 'menu' | 'game' | 'hub' | 'inventory' | 'profile' | 'stats' | 'settings' | 'friends' | 'alliance' | 'raid' | 'airdrop' | 'charcreate' | 'attributes';
 export type Language = 'ru' | 'en';
@@ -316,6 +317,22 @@ export const useGameStore = create<GameState>()(
       collectProgress: 0,
       levelUpVisible: false,
       questCompleteVisible: null,
+
+      /** Sync current state to Firebase */
+      _syncToFirebase: () => {
+        const s = _get();
+        const userId = TelegramSDK.user?.id?.toString() || 'anon';
+        savePlayerData(userId, {
+          playerName: s.playerName,
+          playerLevel: s.playerLevel,
+          goldBalance: s.goldBalance,
+          characterRace: s.characterRace,
+          characterClass: s.characterClass,
+          inventory: s.inventory,
+          equipment: s.equipment,
+          playerXP: s.playerXP,
+        });
+      },
 
       setScreen: (screen) => set({ screen }),
       toggleLanguage: () => set(s => ({ language: s.language === 'ru' ? 'en' : 'ru' })),

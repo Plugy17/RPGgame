@@ -16,7 +16,8 @@
     "react-dom": "^18.3.1",
     "three": "^0.167.0",
     "three-stdlib": "^2.36.1",
-    "zustand": "^4.5.4"
+    "zustand": "^4.5.4",
+    "firebase": "^10.7.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
