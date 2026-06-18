@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Almendra:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&family=MedievalSharp&display=swap');
+
 * {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -13,8 +15,8 @@ body {
   overflow: hidden;
   width: 100vw;
   height: 100vh;
-  background: #0d0d1a;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #0a0a0f;
+  font-family: 'Cinzel', 'IM Fell English', 'MedievalSharp', serif;
 }
 
 #root {
@@ -29,56 +31,184 @@ canvas {
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* === WARCRAFT-STYLE TEXT CLASSES === */
 .font-title {
   font-family: 'Cinzel', serif;
+  font-weight: 900;
+  letter-spacing: 0.15em;
 }
 
 .font-fantasy {
   font-family: 'Almendra', serif;
 }
 
+.font-wow {
+  font-family: 'IM Fell English', 'MedievalSharp', serif;
+}
+
+.font-wow-heading {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* === WARCRAFT-STYLE UI COMPONENTS === */
+
+/* Stone/Parchment panel background */
+.wow-panel {
+  background: linear-gradient(180deg, rgba(20, 18, 30, 0.95) 0%, rgba(15, 13, 22, 0.98) 100%);
+  border: 2px solid #6b5a3a;
+  box-shadow: 
+    inset 0 0 30px rgba(0,0,0,0.6),
+    0 0 15px rgba(107,90,58,0.3),
+    inset 0 0 8px rgba(107,90,58,0.15);
+}
+
+/* Gold ornate border */
+.wow-border {
+  border: 2px solid #8b7a3a;
+  background: linear-gradient(135deg, rgba(139,122,58,0.15) 0%, transparent 50%, rgba(139,122,58,0.15) 100%);
+}
+
+.wow-border-thick {
+  border: 3px solid #8b7535;
+  box-shadow: 
+    0 0 10px rgba(139,117,53,0.4),
+    inset 0 0 10px rgba(139,117,53,0.1);
+}
+
+/* Runic button */
+.wow-btn {
+  position: relative;
+  background: linear-gradient(180deg, #2a1f0a 0%, #1a1208 50%, #0f0a04 100%);
+  border: 2px solid #8b7a3a;
+  color: #d4c08a;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 8px rgba(212,192,138,0.3);
+}
+
+.wow-btn:hover {
+  border-color: #c4a84a;
+  color: #f0d48a;
+  box-shadow: 
+    0 0 20px rgba(196,168,74,0.3),
+    inset 0 0 20px rgba(196,168,74,0.1);
+}
+
+.wow-btn:active {
+  transform: scale(0.96);
+}
+
+/* WoW-style gold text */
+.wow-gold {
+  color: #d4a84a;
+  text-shadow: 
+    0 0 10px rgba(212,168,74,0.6),
+    0 0 20px rgba(212,168,74,0.3),
+    0 2px 4px rgba(0,0,0,0.8);
+}
+
+.wow-gold-dark {
+  color: #8b7535;
+  text-shadow: 0 0 8px rgba(139,117,53,0.4);
+}
+
+/* Stone texture background */
+.wow-stone {
+  background-image: 
+    radial-gradient(ellipse at 20% 50%, rgba(60,55,70,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(40,35,50,0.3) 0%, transparent 50%),
+    linear-gradient(180deg, #12101a 0%, #0d0b14 50%, #0a0810 100%);
+}
+
+/* Parchment tone */
+.wow-parchment {
+  background: linear-gradient(180deg, rgba(60,50,35,0.95) 0%, rgba(40,33,22,0.98) 100%);
+  border: 1px solid #6b5a3a;
+}
+
+/* Runic separator */
+.wow-separator {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #8b7a3a 20%, #c4a84a 50%, #8b7a3a 80%, transparent 100%);
+  box-shadow: 0 0 6px rgba(196,168,74,0.3);
+}
+
+/* === KEYFRAMES === */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(251,191,36,0.4); }
-  50%       { box-shadow: 0 0 24px rgba(251,191,36,0.9); }
+
+@keyframes wow-glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(212,168,74,0.3); }
+  50%       { box-shadow: 0 0 30px rgba(212,168,74,0.8), 0 0 60px rgba(212,168,74,0.2); }
 }
+
 @keyframes portal-spin {
   from { transform: rotateZ(0deg); }
   to   { transform: rotateZ(360deg); }
 }
+
 @keyframes slide-up {
   from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
 @keyframes shake {
   0%,100% { transform: translateX(0); }
   25%     { transform: translateX(-6px); }
   75%     { transform: translateX(6px); }
 }
+
 @keyframes xp-flash {
   0%,100% { opacity:1; }
-  50%     { opacity:0.5; color:#fbbf24; }
+  50%     { opacity:0.5; color:#d4a84a; }
 }
+
 @keyframes breathe {
   0%, 100% { transform: scaleY(1) translateY(0); }
   50%       { transform: scaleY(1.02) translateY(-0.02em); }
 }
+
 @keyframes rune-glow {
-  0%, 100% { text-shadow: 0 0 6px rgba(251,191,36,0.4); }
-  50%       { text-shadow: 0 0 18px rgba(251,191,36,0.8), 0 0 30px rgba(251,191,36,0.3); }
+  0%, 100% { text-shadow: 0 0 8px rgba(212,168,74,0.4); }
+  50%       { text-shadow: 0 0 20px rgba(212,168,74,0.8), 0 0 40px rgba(212,168,74,0.3); }
 }
+
 @keyframes pedestal-shimmer {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-.anim-fade-in   { animation: fadeIn 0.4s ease both; }
-.anim-slide-up  { animation: slide-up 0.35s ease both; }
-.anim-glow      { animation: glow-pulse 2s ease-in-out infinite; }
-.anim-shake     { animation: shake 0.35s ease; }
-.anim-xp        { animation: xp-flash 0.6s ease; }
-.anim-breathe   { animation: breathe 3s ease-in-out infinite; }
-.anim-rune      { animation: rune-glow 2.5s ease-in-out infinite; }
+@keyframes wow-border-pulse {
+  0%, 100% { border-color: rgba(139,122,58,0.6); }
+  50%       { border-color: rgba(196,168,74,0.9); }
+}
+
+@keyframes fire-flicker {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  25%      { opacity: 0.9; transform: scaleY(1.1); }
+  50%      { opacity: 0.95; transform: scaleY(0.95); }
+  75%      { opacity: 0.85; transform: scaleY(1.05); }
+}
+
+@keyframes torch-flicker {
+  0%, 100% { box-shadow: 0 0 8px #ff6622, 0 0 16px #ff4400; }
+  50%      { box-shadow: 0 0 12px #ff8844, 0 0 24px #ff6622; }
+}
+
+.anim-fade-in    { animation: fadeIn 0.4s ease both; }
+.anim-slide-up   { animation: slide-up 0.35s ease both; }
+.anim-wow-glow   { animation: wow-glow-pulse 2s ease-in-out infinite; }
+.anim-shake      { animation: shake 0.35s ease; }
+.anim-xp         { animation: xp-flash 0.6s ease; }
+.anim-breathe    { animation: breathe 3s ease-in-out infinite; }
+.anim-rune       { animation: rune-glow 2.5s ease-in-out infinite; }
+.anim-fire       { animation: fire-flicker 0.8s ease-in-out infinite; }
+.anim-torch      { animation: torch-flicker 1.5s ease-in-out infinite; }
