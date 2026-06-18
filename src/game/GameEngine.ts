@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three-stdlib';
 import { RenderPass } from 'three-stdlib';
 import { UnrealBloomPass } from 'three-stdlib';
+import { GLTFLoader } from 'three-stdlib';
 import type { LocationConfig } from '../data/locations';
 import { ITEMS } from '../data/items';
 import type { Race } from '../data/classes';

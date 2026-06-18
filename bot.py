@@ -17,7 +17,7 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN", "8976079456:AAGhpcWFNGf5IOYfpZG0xW5st7mk
 # URL of the game webapp — update to your Vercel/Production URL
 GAME_WEBAPP_URL = os.environ.get(
     "GAME_WEBAPP_URL",
-    "https://telegram-3d-rpg-mini-k097.bolt.host"
+    "https://rp-ggame-zedx.vercel.app/"
 )
 
 # Initialize bot and dispatcher
